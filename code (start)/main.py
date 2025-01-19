@@ -46,16 +46,8 @@ class Game:
                 ),
             ),
         }
-        print(self.overworld_frames["coast"])
 
     def set_up(self, tmx_map, player_start_pos):
-        # water
-        for obj in tmx_map.get_layer_by_name("Water"):
-            for x in range(int(obj.x), int(obj.x + obj.width), TILE_SIZE):
-                for y in range(int(obj.y), int(obj.y + obj.height), TILE_SIZE):
-                    AnimatedSprite(
-                        (x, y), self.overworld_frames["water"], self.all_sprites
-                    )
 
         # terrain
         for layer in ["Terrain", "Terrain Top"]:
@@ -71,7 +63,25 @@ class Game:
         for obj in tmx_map.get_layer_by_name("Objects"):
             Sprite((obj.x, obj.y), obj.image, self.all_sprites)
 
+        # water
+        for obj in tmx_map.get_layer_by_name("Water"):
+            for x in range(int(obj.x), int(obj.x + obj.width), TILE_SIZE):
+                for y in range(int(obj.y), int(obj.y + obj.height), TILE_SIZE):
+                    AnimatedSprite(
+                        (x, y),
+                        self.overworld_frames["water"],
+                        self.all_sprites,
+                    )
+
         # coast
+        for obj in tmx_map.get_layer_by_name("Coast"):
+            terrain = obj.properties["terrain"]
+            side = obj.properties["side"]
+            AnimatedSprite(
+                (obj.x, obj.y),
+                self.overworld_frames["coast"][terrain][side],
+                self.all_sprites,
+            )
 
     def run(self):
         while True:

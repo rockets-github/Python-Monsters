@@ -64,7 +64,7 @@ def import_tilemap(cols, rows, *path):
 def coast_importer(cols, rows, *path):
     frame_dict = import_tilemap(cols, rows, *path)
     new_dict = {}
-    terrains = ["grass", "grass_i", "sand", "sand_i", "rock", "rock_i", "ice", "ice_i"]
+    terrains = ["grass", "grass_i", "sand_i", "sand", "rock", "rock_i", "ice", "ice_i"]
     sides = {
         "topleft": (0, 0),
         "top": (1, 0),
