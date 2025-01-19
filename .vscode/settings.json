@@ -1,6 +1,10 @@
 {
     "cSpell.words": [
+        "centerx",
+        "centery",
+        "colliderect",
         "frect",
+        "hitbox",
         "overworld",
         "tilemap",
         "tilesets"
