@@ -101,3 +101,23 @@ def coast_importer(cols, rows, *path):
                 for row in range(0, rows, 3)
             ]
     return new_dict
+
+
+def check_connection(radius, entity, target, tolerance=30):
+    relation = vector(target.rect.center) - vector(entity.rect.center)
+    if relation.length() < radius:
+        if (
+            entity.facing_direction == "left"
+            and relation.x < 0
+            and abs(relation.y) < tolerance
+            or entity.facing_direction == "right"
+            and relation.x > 0
+            and abs(relation.y) < tolerance
+            or entity.facing_direction == "up"
+            and relation.y < 0
+            and abs(relation.x) < tolerance
+            or entity.facing_direction == "down"
+            and relation.y > 0
+            and abs(relation.x) < tolerance
+        ):
+            return True
