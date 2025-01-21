@@ -153,6 +153,10 @@ class Game:
                     ),
                     facing_direction=obj.properties["direction"],
                     character_data=TRAINER_DATA[obj.properties["character_id"]],
+                    player=self.player,
+                    create_dialog=self.create_dialog,
+                    collision_sprites=self.collision_sprites,
+                    radius=obj.properties["radius"],
                 )
 
     def input(self):
@@ -161,7 +165,7 @@ class Game:
             if keys[pygame.K_SPACE]:
 
                 for character in self.character_sprites:
-                    if check_connection(100, self.player, character):
+                    if check_connections(100, self.player, character):
                         # block player
                         self.player.block()
                         # entities face each other
