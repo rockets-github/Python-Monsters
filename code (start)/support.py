@@ -2,13 +2,18 @@ from settings import *
 from os.path import join
 from os import walk
 from pytmx.util_pygame import load_pygame
+from pathlib import Path
 
 
 # imports
-def import_image(*path, alpha = True, format = 'png'):
-	full_path = join(*path) + f'.{format}'
-	surf = pygame.image.load(full_path).convert_alpha() if alpha else pygame.image.load(full_path).convert()
-	return surf
+def import_image(*path, alpha=True, format="png"):
+    full_path = join(*path) + f".{format}"
+    surf = (
+        pygame.image.load(full_path).convert_alpha()
+        if alpha
+        else pygame.image.load(full_path).convert()
+    )
+    return surf
 
 
 def import_folder(*path):
@@ -97,6 +102,13 @@ def coast_importer(cols, rows, *path):
                 for row in range(0, rows, 3)
             ]
     return new_dict
+
+
+def tmx_importer(path: Path):
+    tmx_dict = {}
+    for file_path in path.glob("*.tmx"):
+        tmx_dict[file_path.stem] = load_pygame(file_path)
+    return tmx_dict
 
 
 def check_connections(radius, entity, target, tolerance=30):
