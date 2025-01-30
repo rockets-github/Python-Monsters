@@ -16,6 +16,8 @@ from groups import AllSprites
 from dialog import DialogTree
 
 from support import *
+from monster import Monster
+from monster_index import MonsterIndex
 
 
 class Game:
@@ -26,6 +28,18 @@ class Game:
         pygame.display.set_caption("Monster Hunter")
 
         self.clock = pygame.Clock()
+
+        # player monsters
+        self.player_monsters = {
+            0: Monster("Charmadillo", 30),
+            1: Monster("Friolera", 29),
+            2: Monster("Larvea", 3),
+            3: Monster("Atrox", 24),
+            4: Monster("Sparchu", 24),
+            5: Monster("Gulfin", 24),
+            6: Monster("Jacana", 2),
+            7: Monster("Pouch", 3),
+        }
 
         # group
         self.all_sprites = AllSprites()
@@ -44,7 +58,10 @@ class Game:
         self.import_asset()
         self.set_up(self.tmx_maps["world"], "house")
 
+        # overlays
         self.dialog_tree = None
+        self.monster_index = MonsterIndex(self.player_monsters, self.font, self.monster_frames)
+        self.index_open = False
 
     def import_asset(self):
         self.tmx_maps = tmx_importer(
@@ -68,13 +85,43 @@ class Game:
                 Path.joinpath(Path(__file__).parents[1], "graphics", "characters")
             ),
         }
+
+        self.monster_frames = {
+            "icons": import_folder_dict(
+                Path.joinpath(Path(__file__).parents[1], "graphics", "icons")
+            )
+        }
+
+        print(self.monster_frames)
+
         self.font = {
             "dialog": pygame.font.Font(
                 Path.joinpath(
                     Path(__file__).parents[1], "graphics", "fonts", "PixeloidSans.ttf"
                 ),
                 30,
-            )
+            ),
+            "regular": pygame.font.Font(
+                Path.joinpath(
+                    Path(__file__).parents[1], "graphics", "fonts", "PixeloidSans.ttf"
+                ),
+                18,
+            ),
+            "small": pygame.font.Font(
+                Path.joinpath(
+                    Path(__file__).parents[1], "graphics", "fonts", "PixeloidSans.ttf"
+                ),
+                14,
+            ),
+            "bold": pygame.font.Font(
+                Path.joinpath(
+                    Path(__file__).parents[1],
+                    "graphics",
+                    "fonts",
+                    "dogicapixelbold.otf",
+                ),
+                20,
+            ),
         }
 
     def set_up(self, tmx_map, player_start_pos):
@@ -198,6 +245,9 @@ class Game:
                         # create dialog
                         self.create_dialog(character)
                         character.can_rotate = False
+            if keys[pygame.K_RETURN]:
+                self.index_open = not self.index_open
+                self.player.blocked = not self.player.blocked
 
     def create_dialog(self, character):
         if not self.dialog_tree:
@@ -266,7 +316,8 @@ class Game:
             # overlays
             if self.dialog_tree:
                 self.dialog_tree.update()
-
+            if self.index_open:
+                self.monster_index.update(dt)
             self.tint_screen(dt)
             pygame.display.update()
 
