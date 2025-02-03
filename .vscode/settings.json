@@ -5,6 +5,8 @@
         "colliderect",
         "frect",
         "hitbox",
+        "midleft",
+        "midtop",
         "overworld",
         "tilemap",
         "tilesets"

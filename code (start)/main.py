@@ -60,7 +60,9 @@ class Game:
 
         # overlays
         self.dialog_tree = None
-        self.monster_index = MonsterIndex(self.player_monsters, self.font, self.monster_frames)
+        self.monster_index = MonsterIndex(
+            self.player_monsters, self.font, self.monster_frames
+        )
         self.index_open = False
 
     def import_asset(self):
@@ -89,10 +91,14 @@ class Game:
         self.monster_frames = {
             "icons": import_folder_dict(
                 Path.joinpath(Path(__file__).parents[1], "graphics", "icons")
-            )
+            ),
+            "monsters": monster_importer(
+                4, 2, Path.joinpath(Path(__file__).parents[1], "graphics", "monsters")
+            ),
+            "ui": import_folder_dict(
+                Path.joinpath(Path(__file__).parents[1], "graphics", "ui")
+            ),
         }
-
-        print(self.monster_frames)
 
         self.font = {
             "dialog": pygame.font.Font(
@@ -225,8 +231,8 @@ class Game:
                     facing_direction=obj.properties["direction"],
                     character_data=TRAINER_DATA[obj.properties["character_id"]],
                     player=self.player,
-                    create_dialog=self.create_dialog,
                     collision_sprites=self.collision_sprites,
+                    create_dialog=self.create_dialog,
                     radius=obj.properties["radius"],
                 )
 
