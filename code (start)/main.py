@@ -18,6 +18,7 @@ from dialog import DialogTree
 from support import *
 from monster import Monster
 from monster_index import MonsterIndex
+from battle import Battle
 
 
 class Game:
@@ -39,6 +40,15 @@ class Game:
             5: Monster("Gulfin", 24),
             6: Monster("Jacana", 2),
             7: Monster("Pouch", 3),
+        }
+
+        # dummy
+        self.dummy_monsters = {
+            0: Monster("Atrox", 12),
+            1: Monster("Sparchu", 15),
+            2: Monster("Gulfin", 19),
+            3: Monster("Jacana", 2),
+            4: Monster("Pouch", 3),
         }
 
         # group
@@ -64,6 +74,13 @@ class Game:
             self.player_monsters, self.font, self.monster_frames
         )
         self.index_open = False
+        self.battle = Battle(
+            self.player_monsters,
+            self.dummy_monsters,
+            self.monster_frames,
+            self.bg_frames["forest"],
+            self.font,
+        )
 
     def import_asset(self):
         self.tmx_maps = tmx_importer(
@@ -129,6 +146,10 @@ class Game:
                 20,
             ),
         }
+
+        self.bg_frames = import_folder_dict(
+            Path.joinpath(Path(__file__).parents[1], "graphics", "backgrounds")
+        )
 
     def set_up(self, tmx_map, player_start_pos):
         # clear the map
@@ -238,7 +259,7 @@ class Game:
 
     # dialog system
     def input(self):
-        if not self.dialog_tree:
+        if not self.dialog_tree and not self.battle:
             keys = pygame.key.get_just_pressed()
             if keys[pygame.K_SPACE]:
 
@@ -324,6 +345,9 @@ class Game:
                 self.dialog_tree.update()
             if self.index_open:
                 self.monster_index.update(dt)
+            if self.battle:
+                self.battle.update(dt)
+
             self.tint_screen(dt)
             pygame.display.update()
 

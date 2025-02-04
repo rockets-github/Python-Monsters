@@ -6,6 +6,7 @@
         "frect",
         "hitbox",
         "midleft",
+        "midright",
         "midtop",
         "overworld",
         "tilemap",
