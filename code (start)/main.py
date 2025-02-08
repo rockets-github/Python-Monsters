@@ -40,6 +40,9 @@ class Game:
             5: Monster("Gulfin", 24),
             6: Monster("Jacana", 2),
             7: Monster("Pouch", 3),
+            8: Monster("Gulfin", 100),
+            9: Monster("Jacana", 100),
+            10: Monster("Pouch", 100),
         }
 
         # dummy
@@ -86,7 +89,6 @@ class Game:
         self.tmx_maps = tmx_importer(
             Path.joinpath(Path(__file__).parents[1], "data", "maps")
         )
-
         self.overworld_frames = {
             "water": import_folder(
                 Path.joinpath(
@@ -116,6 +118,10 @@ class Game:
                 Path.joinpath(Path(__file__).parents[1], "graphics", "ui")
             ),
         }
+
+        self.monster_frames["outlines"] = outline_creator(
+            self.monster_frames["monsters"], 4
+        )
 
         self.font = {
             "dialog": pygame.font.Font(
