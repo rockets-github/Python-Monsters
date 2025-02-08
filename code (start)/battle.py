@@ -252,7 +252,6 @@ class Battle:
         bg_rect = pygame.FRect((0, 0), (width, height)).move_to(
             midleft=self.current_monster.rect.midright + vector(20, 0)
         )
-
         pygame.draw.rect(self.display_surface, COLORS["white"], bg_rect, 0, 5)
 
         # monsters
@@ -268,12 +267,13 @@ class Battle:
 
         for index, monster in enumerate(self.available_monsters.values()):
             selected = index == self.indexes["switch"]
-            item_bg_rect = pygame.FRect((0, 0), (width, height)).move_to(
+            item_bg_rect = pygame.FRect((0, 0), (width, item_height)).move_to(
                 midleft=(
                     bg_rect.left,
                     bg_rect.top + item_height / 2 + index * item_height + v_offset,
                 )
             )
+
             icon_surf = self.monster_frames["icons"][monster.name]
             icon_rect = icon_surf.get_frect(
                 midleft=bg_rect.topleft
@@ -310,12 +310,9 @@ class Battle:
                         5,
                         5,
                     )
-
                 else:
                     pygame.draw.rect(
-                        self.display_surface,
-                        COLORS["dark white"],
-                        item_bg_rect,
+                        self.display_surface, COLORS["dark white"], item_bg_rect
                     )
             if bg_rect.collidepoint(item_bg_rect.center):
                 for surf, rect in ((icon_surf, icon_rect), (text_surf, text_rect)):
