@@ -112,7 +112,6 @@ def tmx_importer(path: Path):
 
 
 def monster_importer(cols, rows, path: Path):
-    print(path)
     monster_dict = {}
     for file_path in path.glob("*.png"):
         monster_dict[file_path.stem] = {}
@@ -148,6 +147,17 @@ def outline_creator(frame_dict, width):
                 new_surf.blit(white_frame, (0, width))
                 outline_frame_dict[monster][state].append(new_surf)
     return outline_frame_dict
+
+
+def attack_import(path: Path):
+    attack_data = {}
+    for file_path in path.glob("*.png"):
+        print(f"{file_path.parent=}")
+        print(f"{file_path.name=}")
+        attack_data[file_path.stem] = list(
+            import_tilemap(4, 1, file_path.parent, file_path.stem).values()
+        )
+    return attack_data
 
 
 # game functions

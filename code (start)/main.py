@@ -117,6 +117,9 @@ class Game:
             "ui": import_folder_dict(
                 Path.joinpath(Path(__file__).parents[1], "graphics", "ui")
             ),
+            "attacks": attack_import(
+                Path.joinpath(Path(__file__).parents[1], "graphics", "attacks")
+            ),
         }
 
         self.monster_frames["outlines"] = outline_creator(
