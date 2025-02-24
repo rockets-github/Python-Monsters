@@ -2,7 +2,7 @@ from settings import *
 from support import check_connections
 from timer_class import Timer
 from random import choice
-
+from monster import Monster
 
 class Entity(pygame.sprite.Sprite):
     def __init__(self, pos, frames, groups, facing_direction):
@@ -68,6 +68,8 @@ class Character(Entity):
         create_dialog,
         collision_sprites,
         radius,
+        nurse,
+        notice_sound
     ):
         super().__init__(pos, frames, groups, facing_direction)
         self.character_data = character_data
@@ -76,7 +78,10 @@ class Character(Entity):
         self.collision_rects = [
             sprite.rect for sprite in collision_sprites if sprite is not self
         ]
-
+        self.nurse = nurse
+        self.monsters = {i: Monster(name, lvl) for i, (name, lvl) in character_data['monsters'].items()} if 'monsters' in character_data else None
+        
+        
         # move
         self.has_moved = False
         self.can_rotate = True
@@ -88,6 +93,8 @@ class Character(Entity):
             "look around": Timer(1500, True, True, self.random_view_direction),
             "notice": Timer(500, func=self.start_move),
         }
+        
+        self.notice_sound = notice_sound
 
     def random_view_direction(self):
         if self.can_rotate:
@@ -111,6 +118,7 @@ class Character(Entity):
             self.can_rotate = False
             self.has_noticed = True
             self.player.noticed = True
+            self.notice_sound.play()
 
     def has_los(self):
         if vector(self.rect.center).distance_to(self.player.rect.center) < self.radius:

@@ -152,12 +152,18 @@ def outline_creator(frame_dict, width):
 def attack_import(path: Path):
     attack_data = {}
     for file_path in path.glob("*.png"):
-        print(f"{file_path.parent=}")
-        print(f"{file_path.name=}")
         attack_data[file_path.stem] = list(
             import_tilemap(4, 1, file_path.parent, file_path.stem).values()
         )
     return attack_data
+
+
+def audio_importer(path: Path):
+    files = {}
+    for file_path in path.glob("*"):
+        files[file_path.stem] = pygame.mixer.Sound(file_path)
+
+    return files
 
 
 # game functions
